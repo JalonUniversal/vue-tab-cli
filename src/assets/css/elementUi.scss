@@ -1,0 +1,11 @@
+// dialog 样式修改
+::v-deep .el-dialog {
+    border-radius: 5px;
+    .el-dialog__header {
+        border-bottom: 1px solid $color-border;
+        padding: 10px 20px;
+        .el-dialog__headerbtn {
+            top: 15px;
+        }
+    }
+}
