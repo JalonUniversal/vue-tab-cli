@@ -14,10 +14,7 @@ import components from './component/common';
 import { storePlugin } from './store';
 import entry from './entry';
 import clipboard from 'vue-clipboard2';
-// const originalPush = VueRouter.prototype.push
-// VueRouter.prototype.push = function push(location) {
-//   return originalPush.call(this, location).catch(err => err)
-// }
+
 Vue.config.productionTip = false;
 
 // 注册页面组件
