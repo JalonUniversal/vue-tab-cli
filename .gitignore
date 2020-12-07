@@ -2,10 +2,6 @@
 node_modules
 dist
 dist.zip
-.vscode
-vue.config.js
-/src/plugins/http.js
-
 
 # local env files
 .env.local
