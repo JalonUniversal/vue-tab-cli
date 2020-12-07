@@ -10,7 +10,7 @@ import { plugins } from './plugins';
 import { layouts } from './layout';
 import registerPage from './component';
 import { directives } from './directives';
-import components from './component/common';
+import components from './component/public';
 import { storePlugin } from './store';
 import entry from './entry';
 import clipboard from 'vue-clipboard2';
