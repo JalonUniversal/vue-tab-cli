@@ -1,60 +1,62 @@
 <template>
 	<div class="search-header">
-		<el-form :inline="true" :model="formData" :rules="formRules" ref="formRef" label-width="150px" label-suffix=":">
-			<transition name="el-fade-in-linear">
-				<el-row :gutter="20">
-					<el-col :span="8" v-for="(item, idx) in config.form" :key="idx" v-show="expand ? true : item.showForever">
-						<el-form-item :label="item.label" class="search-header-item" :prop="item.key">
-							<!-- 输入框 -->
-							<template v-if="item.type === 'input'">
-								<el-input
-									v-model="formData[item.key]"
-									:placeholder="item.placeholder"
-									:maxlength="item.maxlength"
-									size="medium"
-									clearable
+		<el-form
+			:inline="true"
+			:model="formData"
+			:rules="formRules"
+			ref="formRef"
+			label-width="160px"
+			label-suffix=":"
+			@submit.native.prevent
+		>
+			<el-row :gutter="24">
+				<el-col :span="8" v-for="(item, idx) in config" :key="idx" v-show="expand ? true : item.showForever">
+					<el-form-item :label="item.label" class="search-header-item" :prop="item.key">
+						<!-- 输入框 -->
+						<template v-if="item.type === 'input'">
+							<el-input
+								v-model="formData[item.key]"
+								:placeholder="item.placeholder"
+								:maxlength="item.maxlength"
+								size="medium"
+								:disabled="item.disabled || false"
+								clearable
+							/>
+						</template>
+						<!-- 下拉框 -->
+						<template v-else-if="item.type === 'select'">
+							<el-select v-model="formData[item.key]" :placeholder="item.placeholder" size="medium" clearable>
+								<el-option
+									v-for="(option, idx) in item.options"
+									:key="idx"
+									:value="option.value"
+									:label="option.label"
 								/>
-							</template>
-							<!-- 下拉框 -->
-							<template v-else-if="item.type === 'select'">
-								<el-select v-model="formData[item.key]" :placeholder="item.placeholder" size="medium" clearable>
-									<el-option
-										v-for="(option, idx) in item.options"
-										:key="idx"
-										:value="option.value"
-										:label="option.label"
-									/>
-								</el-select>
-							</template>
-							<!-- 日期选择器 -->
-							<template v-else-if="item.type === 'datePicker'">
-								<el-date-picker
-									:type="item.config.type"
-									v-model="formData[item.key]"
-									:placeholder="item.config.placeholder"
-									:range-separator="'~' || item.config.rangeSeparator"
-									:start-placeholder="'开始日期' || item.config.startPlaceholder"
-									:end-placeholder="'结束日期' || item.config.endPlaceholder"
-									:picker-options="item.config.pickerOptions || defaultPickerOptions"
-									size="medium"
-									:value-format="item.config.valueFormat || 'timestamp'"
-									@input="handleDateRangeUpdate($event, formData, item.key)"
-									clearable
-								/>
-							</template>
-							<!-- 多选框 -->
-							<!-- <template v-else-if="item.type === 'checkbox'">
-                <el-checkbox v-model="formData[item.key]" :size="item.size || 'medium'" />
-              </template> -->
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</transition>
+							</el-select>
+						</template>
+						<!-- 日期选择器 -->
+						<template v-else-if="item.type === 'datePicker'">
+							<el-date-picker
+								:type="item.config.type"
+								v-model="formData[item.key]"
+								:placeholder="item.config.placeholder"
+								:range-separator="'~' || item.config.rangeSeparator"
+								:start-placeholder="'开始日期' || item.config.startPlaceholder"
+								:end-placeholder="'结束日期' || item.config.endPlaceholder"
+								:picker-options="item.config.pickerOptions || defaultPickerOptions"
+								size="medium"
+								:value-format="item.config.valueFormat || 'timestamp'"
+								:default-time="item.config.defaultTime"
+								@input="handleDateRangeUpdate($event, formData, item.key)"
+								clearable
+							/>
+						</template>
+					</el-form-item>
+				</el-col>
+			</el-row>
 			<!-- 按钮 -->
 			<el-row type="flex" justify="end" align="middle">
-				<el-button type="primary" icon="el-icon-search" @click="emitSearch" class="search-button">
-					搜索
-				</el-button>
+				<el-button type="primary" icon="el-icon-search" @click="emitSearch" class="search-button"> 搜索 </el-button>
 				<el-button icon="el-icon-refresh-right" @click="emitReset" class="search-button" v-if="showReset">
 					重置
 				</el-button>
@@ -70,13 +72,21 @@
 <script>
 import { store } from '@/store';
 import { dateRangePickerGenerator } from 'util';
+import { throttle } from 'underscore';
 
 export default {
 	name: 'searchPanel',
 	props: {
-		//查询配置项
-		config: Object,
-		default: () => {},
+		// 查询配置项
+		config: {
+			type: Array,
+			default: () => {},
+		},
+		// 表单验证规则
+		rules: {
+			type: Object,
+			default: () => {},
+		},
 		// 是否显示重置按钮
 		showReset: {
 			type: Boolean,
@@ -117,11 +127,10 @@ export default {
 			},
 		},
 	},
-
 	methods: {
 		// 初始化数据
 		initFormData() {
-			let [...dataArr] = this.config.form || [];
+			let [...dataArr] = this.config || [];
 			let obj = {};
 			dataArr.forEach((item) => {
 				if (item.type === 'select' && item.bindKey) {
@@ -131,10 +140,10 @@ export default {
 				}
 			});
 			this.formData = Object.assign({}, obj);
-			this.formRules = this.config.rules || {};
+			this.formRules = this.rules || {};
 		},
 		// 查询
-		emitSearch() {
+		emitSearch: throttle(function () {
 			this.$refs['formRef'].validate((valid) => {
 				if (valid) {
 					this.$emit('search', Object.assign({}, this.formData));
@@ -143,12 +152,11 @@ export default {
 					return false;
 				}
 			});
-		},
+		}, 500),
 		// 清空
 		emitReset() {
 			this.initFormData();
 			this.$refs.formRef && this.$refs.formRef.resetFields();
-			// this.$emit('reset', Object.assign({}, this.formData));
 		},
 		// 日期范围选择清空回调 [修正 element datePicker 控件日期清空时,不回显问题]
 		handleDateRangeUpdate(value, formData, key) {
@@ -161,12 +169,11 @@ export default {
 			});
 		},
 	},
-	beforeDestroy() {},
 };
 </script>
 <style lang="scss">
 .search-header {
-	padding-top: 10px;
+	padding-top: 5px;
 	.search-header-item.el-form-item {
 		width: 100%;
 		display: flex;
@@ -178,9 +185,6 @@ export default {
 		.el-date-editor {
 			width: 100%;
 		}
-	}
-	.search-button {
-		margin-left: 16px !important;
 	}
 }
 </style>
