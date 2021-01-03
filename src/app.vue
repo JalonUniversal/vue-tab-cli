@@ -7,14 +7,17 @@
 			<elSideBar v-else :menu="menu" />
 
 			<el-main class="platform-content customer-tab">
-				<el-tabs v-model="activeTab" type="card" closable @tab-click="clickTab" @tab-remove="removeTab">
-					<el-tab-pane v-for="{ name, title, component } in tabList" :key="name" :label="title" :name="name">
+				<el-tabs v-model="activeTab" type="card" @tab-click="clickTab" @tab-remove="removeTab">
+					<el-tab-pane v-for="{ name, title, component, closable } in tabList" :key="name" :label="title" :name="name" :closable="closable">
 						<keep-alive>
 							<component :is="component" ref="componentalive" />
 						</keep-alive>
 					</el-tab-pane>
 				</el-tabs>
-				<div class="tab-operation-buttons" v-if="tabList.length">
+				<div class="tab-operation-buttons">
+					<div class="operation-box icon-lock" @click.stop="toggleClosable">
+						<i :class="['iconfont', hasLocked ? 'el-icon-unlock' : 'el-icon-lock']" />
+					</div>
 					<div class="operation-box" @click.stop="refreshActiveTabPage">
 						<i class="iconfont">&#xe605;</i>
 					</div>
@@ -88,6 +91,7 @@ function createTab({ title, name, path, query, component }) {
 	tab.path = path || '';
 	tab.query = query || '';
 	tab.component = component || '';
+	tab.closable = true;
 	return tab;
 }
 
@@ -110,6 +114,10 @@ export default {
 		addEventListener('keydown', this.enterHandler);
 	},
 	methods: {
+		// 切换页签锁定状态
+		toggleClosable() {
+			this.tabList[this.matchTabIndex].closable = !this.tabList[this.matchTabIndex].closable;
+		},
 		enterHandler(e) {
 			if (e.keyCode !== 13) return;
 			if (this.matchTabIndex === -1) return;
@@ -278,6 +286,10 @@ export default {
 			// sideBarType 有两个, sideBar、elSideBar 默认为 sideBar
 			const type = localStorage.getItem('sideBarType');
 			return type || 'elSideBar';
+		},
+		hasLocked() {
+			if (/undefined|-1/.test(this.matchTabIndex)) return false;
+			return this.tabList[this.matchTabIndex].closable;
 		},
 	},
 	watch: {
