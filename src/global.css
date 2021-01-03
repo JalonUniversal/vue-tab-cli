@@ -47,11 +47,11 @@ html, body {
 
 .customer-tab > .el-tabs > .el-tabs__header {
 	background-color: #F1F4FA !important;
-	margin-bottom: 0 !important;
+	margin-bottom: 5px !important;
 }
 
 .customer-tab > .el-tabs > .el-tabs__header > .el-tabs__nav-wrap > .el-tabs__nav-scroll {
-	margin-right: 220px !important;
+	margin-right: 245px !important;
 	margin-left: -1px;
 }
 
@@ -79,10 +79,20 @@ html, body {
 }
 
 .customer-tab > .el-tabs > .el-tabs__content {
-	padding: 0 24px 56px 24px !important;
-	overflow-y: scroll;
+	/* padding: 0 24px 56px 24px !important;
+	overflow-y: scroll; */
 	height: calc(100% - 65px);
-	box-sizing: border-box
+	box-sizing: border-box;
+}
+
+.customer-tab > .el-tabs > .el-tabs__content > .el-tab-pane {
+	height: 100% !important;
+	overflow-y: scroll;
+	padding: 0 24px !important;
+}
+
+.customer-tab > .el-tabs > .el-tabs__content > .el-tab-pane > div {
+	padding-bottom: 56px !important;
 }
 
 .customer-tab > .el-tabs > .el-tabs__header > .el-tabs__nav-wrap > .el-tabs__nav-scroll > .el-tabs__nav > .el-tabs__item.is-closable:hover {
