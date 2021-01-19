@@ -14,7 +14,7 @@
 						</keep-alive>
 					</el-tab-pane>
 				</el-tabs>
-				<div class="tab-operation-buttons">
+				<div class="tab-operation-buttons" v-show="tabList.length">
 					<div class="operation-box icon-lock" @click.stop="toggleClosable">
 						<i :class="['iconfont', hasLocked ? 'el-icon-unlock' : 'el-icon-lock']" />
 					</div>
