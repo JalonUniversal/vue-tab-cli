@@ -7,7 +7,7 @@ export default [
 			'@/component/customerManagement/customerOverview.vue'
 		),
 		meta: {
-			title: '顾客概览'
+			title: '图表统计'
 		}
   },
 ];
