@@ -14,6 +14,7 @@ import components from './component/common';
 import { storePlugin } from './store';
 import entry from './entry';
 import clipboard from 'vue-clipboard2';
+import Cookies from 'vue-cookies';
 
 Vue.config.productionTip = false;
 
@@ -21,7 +22,7 @@ Vue.config.productionTip = false;
 registerPage(Vue);
 
 plugins.unshift(VueRouter);
-plugins.push(storePlugin, clipboard);
+plugins.push(storePlugin, clipboard, Cookies);
 // 注册插件
 plugins.forEach(plugin => Vue.use(plugin));
 // 注册布局组件
