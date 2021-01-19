@@ -10,7 +10,6 @@
 					collapse-tags
 					placeholder="请选择开通渠道"
 					size="‘small’"
-					@change="loadKeyIndexCount"
 				>
 					<el-option v-for="{ label, value } in CHANNEL_OPTIONS" :key="value" :label="label" :value="value" />
 				</el-select>
