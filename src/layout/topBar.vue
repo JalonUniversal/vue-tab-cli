@@ -2,7 +2,7 @@
 	<div>
 		<el-header class="platform-topBar">
 			<!-- <img class="logo" :src="LOGO" /> -->
-			<div class="name" @click="toggleScreenFull">vue-tab-cli</div>
+			<div class="name" @click="toggleScreenFull">{{ $config.APP_NAME }}</div>
 			<div class="blank">
 				<template v-if="showWelcome">您好!欢迎</template>
 				<template v-else>

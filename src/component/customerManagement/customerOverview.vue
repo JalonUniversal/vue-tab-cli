@@ -10,7 +10,6 @@
 					collapse-tags
 					placeholder="请选择开通渠道"
 					size="‘small’"
-					@change="loadKeyIndexCount"
 				>
 					<el-option v-for="{ label, value } in CHANNEL_OPTIONS" :key="value" :label="label" :value="value" />
 				</el-select>
@@ -80,6 +79,24 @@ function padZero(val) {
 	return Number(val) < 10 ? String(val).padStart(2, '0') : val + '';
 }
 
+function RandomNumBoth(Min, Max) {
+	var Range = Max - Min;
+	var Rand = Math.random();
+	var num = Min + Math.round(Rand * Range); //四舍五入
+	num = (num * 2) / 3;
+	num = parseInt(num, 10);
+	return num;
+}
+
+function genData() {
+	const result = [];
+	for (let i = 0; i < 23; i++) {
+		const item = RandomNumBoth(0, 10);
+		result.push(item);
+	}
+	return result;
+}
+
 export default {
 	name: 'customerOverview',
 	data() {
@@ -133,88 +150,88 @@ export default {
 			const DD = date.getDate();
 			return `${YYYY}-${padZero(MM)}-${padZero(DD)}`;
 		},
+		// 构造数据
+		mockData() {
+			const data = {
+				legendData: {
+					0: '今日',
+					1: '昨日',
+					2: '7天前',
+					3: '30天前',
+				},
+				seriesList: [
+					{ name: '今日', data: genData() },
+					{ name: '昨日', data: genData() },
+				],
+				xaxisData: Array(23)
+					.fill(0)
+					.map((item, index) => (item = String(index + 1))),
+			};
+			return data;
+		},
 		// 获取新增普通顾客趋势图
-		async loadNormalCustomerTrend() {
-			const res = await this.$fetch('/crm/memberOverview/getNewOrdinaryCount');
-			if (res && res.data) {
-				const { xaxisData, seriesList = [], legendData } = res.data;
-				if (!seriesList.length) {
-					return this.$message.warning('无法获取新增普通顾客趋势数据');
-				}
-				this.customerGraph = echarts.init(this.$refs.normalCustomerGraph);
-				const option = {
-					title: { text: '趋势图' },
-					legend: { data: legendData },
-					tooltip: { trigger: 'axis' },
-					xAxis: {
-						type: 'category',
-						data: xaxisData,
-					},
-					yAxis: { type: 'value' },
-					series: seriesList.map(({ data, name }) => ({ data, type: 'line', name })),
-				};
-				this.customerGraph.setOption(option);
-			} else {
-				this.$message.warning('无法获取新增普通顾客趋势数据');
-			}
+		loadNormalCustomerTrend() {
+			const { legendData, xaxisData, seriesList } = this.mockData();
+			this.customerGraph = echarts.init(this.$refs.normalCustomerGraph);
+			const option = {
+				title: { text: '趋势图' },
+				legend: { data: legendData },
+				tooltip: { trigger: 'axis' },
+				xAxis: {
+					type: 'category',
+					data: xaxisData,
+				},
+				yAxis: { type: 'value' },
+				series: seriesList.map(({ data, name }) => ({ data, type: 'line', name })),
+			};
+			this.customerGraph.setOption(option);
 		},
 		// 获取新增优惠顾客趋势图
-		async loadVIPCustomerTrend() {
-			const res = await this.$fetch('/crm/memberOverview/getNewDiscountCount');
-			if (res && res.data) {
-				const { xaxisData, seriesList = [], legendData } = res.data;
-				if (!seriesList.length) {
-					return this.$message.warning('无法获取新增优惠顾客趋势数据');
-				}
-				this.VIPGraph = echarts.init(this.$refs.discountCustomerGraph);
-				const option = {
-					title: { text: '趋势图' },
-					legend: { data: legendData },
-					tooltip: { trigger: 'axis' },
-					xAxis: {
-						type: 'category',
-						data: xaxisData,
-					},
-					yAxis: { type: 'value' },
-					series: seriesList.map(({ data, name }) => ({ data, type: 'line', name })),
-				};
-				this.VIPGraph.setOption(option);
-			} else {
-				this.$message.warning('无法获取新增优惠顾客趋势数据');
-			}
-		},
-		// 获取关键统计指标
-		async loadKeyIndexCount() {
-			const { startTimeStr, endTimeStr, channels } = this;
-			const data = {
-				startTimeStr,
-				endTimeStr,
-				channels,
+		loadVIPCustomerTrend() {
+			const { legendData, xaxisData, seriesList } = this.mockData();
+			this.VIPGraph = echarts.init(this.$refs.discountCustomerGraph);
+			const option = {
+				title: { text: '趋势图' },
+				legend: { data: legendData },
+				tooltip: { trigger: 'axis' },
+				xAxis: {
+					type: 'category',
+					data: xaxisData,
+				},
+				yAxis: { type: 'value' },
+				series: seriesList.map(({ data, name }) => ({ data, type: 'line', name })),
 			};
-
-			const res = await this.$fetch({
-				method: 'POST',
-				url: '/crm/memberOverview/getKeyIndexCount',
-				data,
-			});
-			if (res && res.data) {
-				this.keyIndexCount = res.data;
-			} else {
-				this.$message.warning('获取关键统计指标信息为空');
-			}
+			this.VIPGraph.setOption(option);
 		},
 		// 获取数据统计详情
-		async loadDetailData() {
-			const res = await this.$fetch('/crm/memberOverview/getDetailData');
-			if (res && res.data) {
-				this.detail = res.data;
-			} else {
-				this.$message.warning('获取数据统计详情为空');
-			}
+		loadDetailData() {
+			const mockData = [
+				{
+					activeCommonMember: 9,
+					loginSuccessTotal: 118,
+					newCommonMember: 3,
+					newVipMember: 14,
+					operateDate: '2021-01-19',
+				},
+				{
+					activeCommonMember: 21,
+					loginSuccessTotal: 186,
+					newCommonMember: 10,
+					newVipMember: 30,
+					operateDate: '2021-01-20',
+				},
+				{
+					activeCommonMember: 0,
+					loginSuccessTotal: 0,
+					newCommonMember: 0,
+					newVipMember: 0,
+					operateDate: '2021-01-21',
+				},
+			];
+			this.detail = mockData;
 		},
 	},
 	mounted() {
-		this.loadKeyIndexCount();
 		this.loadDetailData();
 	},
 };

@@ -64,6 +64,8 @@ const IMAGE_PREFIX = 'http://106.53.110.68:8080/';
 
 // 登录默认使用的 Token
 const DEFAULT_LOGIN_TOKEN = 'Basic b3BfYXBwOnBlcmZlY3RfcG9ydGFs';
+// app name
+const APP_NAME = 'vue-tab-cli';
 
 export default {
 	MENU,
@@ -76,4 +78,5 @@ export default {
 	UPLOAD_URL,
 	UPLOAD_ENV,
 	DEFAULT_LOGIN_TOKEN,
+	APP_NAME,
 }

@@ -1,10 +1,10 @@
 export const MENU = [
 	{
 		icon: "&#xe678;",
-		name: "顾客管理",
+		name: "图表统计",
 		children: [
 			{
-				name: "顾客概览",
+				name: "图表统计",
 				href: "/customer_overview",
 				component: 'customerOverview'
 			},
