@@ -6,6 +6,7 @@ import { busPlugin } from './bus';
 import { tabPlugin } from './tab';
 import { printPlugin } from './print';
 import { dictPlugin } from './dict';
+import { storagePlugin } from './storage';
 
 const plugins = [
 	configPlugin,
@@ -15,7 +16,8 @@ const plugins = [
 	busPlugin,
 	tabPlugin,
 	printPlugin,
-	dictPlugin,
+  dictPlugin,
+  storagePlugin,
 ];
 
 export { plugins }

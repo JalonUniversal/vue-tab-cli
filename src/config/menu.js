@@ -9,5 +9,16 @@ export const MENU = [
 				component: 'customerOverview'
 			},
 		]
+  },
+  {
+		icon: "&#xe678;",
+		name: "缓存读写",
+		children: [
+			{
+				name: "缓存读写",
+				href: "/storage",
+				component: 'storage'
+			},
+		]
 	},
 ];

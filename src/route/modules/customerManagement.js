@@ -10,4 +10,14 @@ export default [
 			title: '图表统计'
 		}
   },
+  {
+		path: 'storage',
+		component: () => import(
+			/* webpackChunkName: 'Customer-storage'*/
+			'@/component/storage/storage.vue'
+		),
+		meta: {
+			title: '缓存读写'
+		}
+  },
 ];
