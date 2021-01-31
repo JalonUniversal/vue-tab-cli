@@ -2,8 +2,7 @@ import { store } from '@/store';
 import cityJson from 'config/city';
 import qs from 'querystring';
 import Vue from 'vue';
-import CONFIG from '../config/index.js';
-const { HOST_MAP, PROTOCOL } = CONFIG;
+import { HOST_MAP, PROTOCOL } from '../config/index';
 
 // 配置选项生成器
 const optionGenerator = (optionMap, keyType = 'number') => Object.entries(optionMap).map(([value, label]) => ({ value: keyType === 'number' ? Number(value) : String(value), label }));

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import CONFIG from 'config/index.js';
-const { HOST_MAP, PROTOCOL } = CONFIG;
+import { HOST_MAP, PROTOCOL } from 'config/index';
 /**
  * 登录管理器
  */
