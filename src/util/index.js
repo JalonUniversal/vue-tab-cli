@@ -1,5 +1,4 @@
 import { store } from '@/store';
-import cityJson from 'config/city';
 import qs from 'querystring';
 import Vue from 'vue';
 import { HOST_MAP, PROTOCOL } from '../config/index';
@@ -90,18 +89,6 @@ const exportExcelPost = async (url, data, title = "Excel数据表") => {
 	}
 }
 
-const getStringFromAddressCode = ({ province, city, district, town }) => {
-	if (province) {
-		const provinceObj = cityJson.filter(item => item.c === province).pop()
-		const cityObj = provinceObj.r.filter(item => item.c === city).pop()
-		const districtObj = cityObj.r.filter(item => item.c === district).pop()
-		const townObj = districtObj.r.filter(item => item.c === town).pop()
-		return `${provinceObj.n}${cityObj.n}${districtObj.n}${townObj.n}`
-	} else {
-		return ''
-	}
-}
-
 // 生成随机字符串(随机字母)
 function generateRandomCode(count = 6) {
 	let ret = [];
@@ -132,7 +119,6 @@ export {
 	exportExcel,
 	genCurrentMonthFirstAndLastDay,
 	exportExcelPost,
-	getStringFromAddressCode,
 	generateRandomCode,
 	selectOptionsToMap,
 };
