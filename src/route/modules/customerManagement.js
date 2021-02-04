@@ -19,5 +19,15 @@ export default [
 		meta: {
 			title: '缓存读写'
 		}
+	},
+	{
+		path: 'locate',
+		component: () => import(
+			/* webpackChunkName: 'Customer-locate'*/
+			'@/component/locate/locate.vue'
+		),
+		meta: {
+			title: '地理定位'
+		}
   },
 ];

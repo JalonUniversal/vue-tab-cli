@@ -21,4 +21,15 @@ export const MENU = [
 			},
 		]
 	},
+	{
+		icon: "&#xe678;",
+		name: "地图定位",
+		children: [
+			{
+				name: "地图定位",
+				href: "/locate",
+				component: 'locate'
+			},
+		]
+	},
 ];
