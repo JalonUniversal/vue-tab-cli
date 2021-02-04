@@ -99,6 +99,40 @@ function generateRandomCode(count = 6) {
 	return ret.join('');
 }
 
+// 脚本加载器
+function loadScript(url, callback, id) {
+	const script = document.createElement("script");
+	script.type = "application/javascript";
+	id && (script.id = id);
+
+	if (script.readyState) {
+		// IE support
+		script.onreadystatechange = () => {
+			if (/loaded|complete/.test(script.readyState)) {
+				script.onreadystatechange = null;
+				setImmediate(() => {
+					callback && callback();
+				});
+			}
+		};
+	} else {
+		// Others support
+		script.onload = () => {
+			setImmediate(() => {
+				callback && callback();
+			});
+		};
+	}
+	script.src = url;
+	if(id && document.getElementById(id)) {
+		setImmediate(() => {
+			callback && callback();
+		});
+		return false;
+	}
+	document.getElementsByTagName("head")[0].appendChild(script);
+}
+
 // 选择器选项转为键值对映射
 const selectOptionsToMap = (options) => {
 	return options.reduce((pre, val) => {
@@ -117,6 +151,7 @@ export {
 	searchConfigGenerator,
 	dateRangePickerGenerator,
 	exportExcel,
+	loadScript,
 	genCurrentMonthFirstAndLastDay,
 	exportExcelPost,
 	generateRandomCode,
