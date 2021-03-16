@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-header class="platform-topBar">
-			<!-- <img class="logo" :src="LOGO" /> -->
+			<img class="logo" :src="LOGO" />
 			<div class="name" @click="toggleScreenFull">{{ $config.APP_NAME }}</div>
 			<div class="blank">
 				<template v-if="showWelcome">您好!欢迎</template>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-// import LOGO from '@/assets/logo.jpeg';
+import LOGO from '@/assets/logo.jpeg';
 import LoginManager from 'util/login';
 
 export default {
@@ -65,7 +65,7 @@ export default {
 			}
 		};
 		return {
-			// LOGO,
+			LOGO,
 			changePasswordModal: {
 				show: false,
 				oldPassword: '',
