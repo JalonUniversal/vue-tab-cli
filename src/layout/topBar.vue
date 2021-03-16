@@ -2,13 +2,19 @@
 	<div>
 		<el-header class="platform-topBar">
 			<img class="logo" :src="LOGO" />
-			<div class="name" @click="toggleScreenFull">{{ $config.APP_NAME }}</div>
+			<div class="name">{{ $config.APP_NAME }}</div>
 			<div class="blank">
-				<template v-if="showWelcome">您好!欢迎</template>
-				<template v-else>
-					<div class="operation" @click.stop="openSwitchSideBarModal">切换菜单</div>
-					<div class="operation" @click.stop="changePassword">修改密码</div>
-					<div class="operation" @click.stop="logout">您好! 管理员, [退出]</div>
+				<template>
+					<i class="el-icon-setting setting-icon" @click="goToSetting" />
+					<div class="operation">
+						<span class="person" @click="viewPersonInfo">
+							<i class="el-icon-user-solid user-icon" />
+							<span class="username">{{ username }}</span>
+						</span>
+
+						<!-- [退出] -->
+						<i class="el-icon-switch-button logout" @click="logout">退出</i>
+					</div>
 				</template>
 			</div>
 		</el-header>
@@ -80,6 +86,9 @@ export default {
 		};
 	},
 	computed: {
+		username() {
+			return '新用户';
+		},
 		showWelcome() {
 			const { path } = this.$route;
 			if (!path) return false;
@@ -90,6 +99,15 @@ export default {
 		goTo(href) {
 			if (!href) return;
 			this.$router.history.push(href);
+		},
+		// 设置
+		goToSetting() {
+			// if (this.$route.path === '/settings') return;
+			// this.$go('/settings');
+		},
+		// 查看用户信息
+		viewPersonInfo() {
+			// this.$go(`update_user?id=${this.$store.state.userInfo.userId}&operatorStatus=0&title=编辑用户`);
 		},
 		// 修改密码
 		changePassword() {
@@ -150,6 +168,9 @@ export default {
 	height: 32px;
 	user-select: none;
 }
+.logout:hover {
+	color: $error;
+}
 .name {
 	margin-left: 20px;
 	border-left: 1px solid #333;
@@ -183,11 +204,30 @@ export default {
 	justify-content: flex-end;
 	align-items: center;
 }
-.user-name {
-	color: $primary;
+.setting-icon {
+	font-size: 20px;
+	margin-right: 24px;
+	&:hover {
+		color: $primary;
+	}
+}
+.person {
+	&:hover {
+		color: $success;
+	}
+}
+.user-icon {
+	font-size: 16px;
+	margin-right: 4px;
+}
+.username {
+	margin-right: 16px;
 }
 .tips {
 	line-height: 22px;
 	margin-bottom: 16px;
+}
+.logclose {
+	color: red !important;
 }
 </style>
