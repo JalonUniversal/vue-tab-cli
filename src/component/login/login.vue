@@ -3,7 +3,7 @@
 		<div class="loginBox">
 			<div class="header">欢迎登录</div>
 			<el-form class="login-form" ref="loginForm" :rules="LOGIN_RULES" :model="loginForm" label-width="20px">
-				<div class='platform-name'>Vue-Tab-Cli</div>
+				<div class='platform-name'>{{ $config.APP_NAME }}</div>
 				<el-form-item>
 					<el-input
 						class="login-input"
@@ -96,7 +96,7 @@ export default {
 				this.loading.close();
 				// 跳转进首页
 				this.$go('/');
-				this.$message.success('登录成功, 欢迎使用 vue-tab-cli');
+				this.$message.success(`登录成功, 欢迎使用 ${this.$config.APP_NAME}`);
 			}, 500);
 		},
 	},
