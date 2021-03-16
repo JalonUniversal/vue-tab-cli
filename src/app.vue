@@ -8,8 +8,14 @@
 
 			<el-main class="platform-content customer-tab">
 				<el-tabs v-model="activeTab" type="card" @tab-click="clickTab" @tab-remove="removeTab">
-					<el-tab-pane v-for="{ name, title, component, closable } in tabList" :key="name" :label="title" :name="name" :closable="closable">
-						<keep-alive>
+					<el-tab-pane
+						v-for="{ name, title, component, closable, mode } in tabList"
+						:key="name"
+						:label="title"
+						:name="name"
+						:closable="closable"
+					>
+						<keep-alive v-if="mode !== 'refresh'">
 							<component :is="component" ref="componentalive" />
 						</keep-alive>
 					</el-tab-pane>
@@ -92,6 +98,10 @@ function createTab({ title, name, path, query, component }) {
 	tab.query = query || '';
 	tab.component = component || '';
 	tab.closable = true;
+	// constant || refresh 两种模式
+	// constant 模式 在浏览器刷新/新建/激活页签时 正常渲染
+	// refresh 模式 在浏览器刷新时不渲染页签, 激活页签进行初始渲染
+	tab.mode = 'constant';
 	return tab;
 }
 
@@ -148,6 +158,7 @@ export default {
 			// 判断页签是否打开
 			const openedTab = this.tabList.find((tab) => tab.name === name);
 			if (openedTab) {
+				openedTab.mode = 'constant';
 				return (this.activeTab = openedTab.name);
 			}
 			// 若未打开 则新建页签
@@ -243,6 +254,9 @@ export default {
 		// 刷新页面回调
 		refreshPageHanlder(event) {
 			event.returnValue = '';
+			const { matchTabIndex } = this;
+			this.tabList.filter((item, index) => index !== matchTabIndex).map(item => (item.mode = 'refresh'));
+			CacheTabManager.cacheTabList(this.tabList);
 			CacheTabManager.syncTabToStorage();
 		},
 		// 监听页面刷新事件
