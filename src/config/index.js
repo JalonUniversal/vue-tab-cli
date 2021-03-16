@@ -22,7 +22,7 @@ const PROTOCOL = 'http';
 // 当前环境  可写开发人员名字 或是环境名 dev|test|prod|netmaxk
 const CURRENT_ENV = 'test'; // 此变量在本地开发环境 改后不要提交到 git上
 // app name
-const APP_NAME = 'vue-tab-cli';
+const APP_NAME = 'Vue-Tab-Cli';
 
 export {
 	MENU,
